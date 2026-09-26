@@ -1,0 +1,12 @@
+<div class="main-container">
+  <div class="sidebar-container" [class.expanded]="isExpanded">
+    <app-cg-sidebar-component
+      [isExpanded]="isExpanded"
+      (menuToggle)="toggleSidebar()"
+    ></app-cg-sidebar-component>
+  </div>
+  <div class="main-content">
+    <div class="dash-header"><span>CONTENT PEDIA</span></div>
+    <div class="dashboard-container"></div>
+  </div>
+</div>
