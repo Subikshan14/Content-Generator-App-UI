@@ -1,10 +1,76 @@
 <div class="side-bar-container">
-  <mat-icon
-    class="menu-icon"
-    aria-label="Toggle menu"
-    fontSet="material-symbols-outlined"
-    (click)="onMenuClick()"
-  >
-    menu
-  </mat-icon>
+  <div class="sidebar-top">
+    <button
+      class="menu-button"
+      type="button"
+      aria-label="Toggle sidebar"
+      [attr.aria-expanded]="isExpanded"
+      (click)="onMenuClick()"
+    >
+      <mat-icon aria-hidden="true" fontSet="material-symbols-outlined">menu</mat-icon>
+    </button>
+    @if (isExpanded) {
+      <div class="sidebar-brand">
+        <span class="brand-mark" aria-hidden="true">CP</span>
+        <span class="brand-copy">
+          <strong>Content Pedia</strong>
+          <small>AI workspace</small>
+        </span>
+      </div>
+    }
+  </div>
+  <div class="sidebar-content">
+    <button
+      class="new-chat-button"
+      type="button"
+      aria-label="New chat"
+      [attr.title]="chatLimitReached ? 'Maximum of 10 chats reached' : 'New chat'"
+      [disabled]="chatLimitReached || isBusy"
+      (click)="onNewChat()"
+    >
+      <mat-icon aria-hidden="true" fontSet="material-symbols-outlined">add</mat-icon>
+      @if (isExpanded) {
+        <span>New chat</span>
+      }
+    </button>
+
+    @if (isExpanded) {
+      <section class="chat-history" aria-label="Your chats">
+        <div class="chat-list-heading">
+          <span>Chats</span>
+          <span class="chat-count">{{ chats.length }}/10</span>
+        </div>
+        <div class="chat-list">
+          @for (chat of chats; track chat.id) {
+            <div class="chat-row" [class.active]="chat.id === activeChatId">
+              <button
+                class="chat-item"
+                type="button"
+                [attr.aria-pressed]="chat.id === activeChatId"
+                [disabled]="isBusy"
+                (click)="onChatSelected(chat.id)"
+              >
+                <mat-icon aria-hidden="true" fontSet="material-symbols-outlined">
+                  chat_bubble_outline
+                </mat-icon>
+                <span>{{ chat.title }}</span>
+              </button>
+              <button
+                class="delete-chat-button"
+                type="button"
+                [attr.aria-label]="'Delete chat ' + chat.title"
+                title="Delete chat"
+                [disabled]="isBusy"
+                (click)="onChatDeleted(chat.id)"
+              >
+                <mat-icon aria-hidden="true" fontSet="material-symbols-outlined">
+                  delete_outline
+                </mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  </div>
 </div>

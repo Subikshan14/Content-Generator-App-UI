@@ -1,16 +1,324 @@
 .side-bar-container {
+  position: relative;
   width: 100%;
   height: 100%;
-  background-color: gray;
-  transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid rgb(219 238 225 / 12%);
+  background: linear-gradient(160deg, #153d34 0%, #12332f 52%, #172f36 100%);
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
 }
 
-.menu-icon {
-  padding: 10px;
+.side-bar-container::after {
+  position: absolute;
+  top: 64px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, transparent, rgb(212 231 211 / 24%), transparent);
+}
+
+.sidebar-top {
+  min-height: 64px;
   width: 100%;
-  height: 8%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+}
+
+.menu-button {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgb(229 242 231 / 14%);
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 4%));
+  color: #e5f2e8;
   cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.menu-button:hover {
+  border-color: rgb(229 242 231 / 30%);
+  background: rgb(255 255 255 / 14%);
+}
+
+.menu-button:focus-visible {
+  outline: 2px solid #b8d9b9;
+  outline-offset: 2px;
+}
+
+.menu-button mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+
+.sidebar-brand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: brand-in 0.2s ease-out both;
+}
+
+.brand-mark {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(239 219 181 / 35%);
+  border-radius: 10px;
+  background: linear-gradient(140deg, #c8e3c9 0%, #e8c8a7 100%);
+  color: #23463b;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.brand-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #f1f8f2;
+  white-space: nowrap;
+}
+
+.brand-copy strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.brand-copy small {
+  color: #afc8b9;
+  font-size: 12px;
+}
+
+.sidebar-content {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 18px 12px;
+}
+
+.new-chat-button {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 11px;
+  padding: 0 11px;
+  border: 1px solid rgb(202 232 210 / 24%);
+  border-radius: 10px;
+  background: linear-gradient(115deg, #c8e3c9 0%, #e8d2b6 100%);
+  color: #23463b;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  transition:
+    filter 0.18s ease,
+    transform 0.18s ease;
+}
+
+.new-chat-button:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.new-chat-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.new-chat-button mat-icon {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.new-chat-button:focus-visible,
+.chat-item:focus-visible {
+  outline: 2px solid #b8d9b9;
+  outline-offset: 2px;
+}
+
+.chat-history {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  color: #b7ccbf;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.chat-count {
+  color: #93ae9d;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chat-list {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  scrollbar-color: rgb(183 204 191 / 35%) transparent;
+  scrollbar-width: thin;
+}
+
+.chat-row {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.chat-row.active {
+  border-color: rgb(190 223 198 / 20%);
+  background: linear-gradient(100deg, rgb(185 221 194 / 17%), rgb(228 202 169 / 9%));
+}
+
+.chat-item {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #d4e3d8;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+
+.chat-item:hover:not(:disabled) {
+  background: rgb(255 255 255 / 7%);
+  color: #f4faf5;
+}
+
+.chat-row.active .chat-item {
+  color: #f5faf5;
+}
+
+.chat-item:disabled {
+  cursor: wait;
+}
+
+.chat-item mat-icon {
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
+  display: grid;
+  place-items: center;
+  color: #a9c5b2;
+  font-size: 19px;
+  line-height: 1;
+}
+
+.chat-item span {
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete-chat-button {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  margin-right: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #9bb6a5;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.delete-chat-button:hover:not(:disabled) {
+  background: rgb(238 142 120 / 15%);
+  color: #f3b3a3;
+}
+
+.delete-chat-button:focus-visible {
+  outline: 2px solid #e8c8a7;
+  outline-offset: 1px;
+}
+
+.delete-chat-button:disabled {
+  cursor: wait;
+  opacity: 0.45;
+}
+
+.delete-chat-button mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+@keyframes brand-in {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-brand {
+    animation: none;
+  }
 }

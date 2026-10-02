@@ -2,41 +2,76 @@
   <div class="sidebar-container" [class.expanded]="isExpanded">
     <app-cg-sidebar-component
       [isExpanded]="isExpanded"
+      [chats]="chats()"
+      [activeChatId]="activeChatId()"
+      [chatLimitReached]="chats().length >= maxChats"
+      [isBusy]="isGenerating()"
       (menuToggle)="toggleSidebar()"
+      (newChat)="createChat()"
+      (chatSelected)="selectChat($event)"
+      (chatDeleted)="deleteChat($event)"
     ></app-cg-sidebar-component>
   </div>
   <div class="main-content">
     <div class="dash-header"><span>CONTENT PEDIA</span></div>
     <div class="dashboard-container">
       <section class="generator" aria-labelledby="generator-title">
-        <h1 id="generator-title">Generate content</h1>
-        <label for="content-prompt">What would you like to create?</label>
-        <textarea
-          id="content-prompt"
-          [(ngModel)]="prompt"
-          placeholder="Describe the content you need..."
-          rows="5"
-          [disabled]="isGenerating()"
-        ></textarea>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="generateContent()"
-          [disabled]="!prompt.trim() || isGenerating()"
-        >
-          {{ isGenerating() ? 'Generating...' : 'Generate' }}
-        </button>
+        <h1 id="generator-title">{{ activeChatTitle() }}</h1>
+        <div class="conversation" role="log" aria-live="polite" aria-relevant="additions">
+          @if (messages().length === 0 && !isGenerating()) {
+            <div class="empty-state">
+              <span class="empty-mark" aria-hidden="true">CP</span>
+              <h2>What are we creating today?</h2>
+            </div>
+          }
+          @for (message of messages(); track $index) {
+            <article class="message-row" [class.user-message]="message.role === 'user'">
+              <div class="message-bubble">
+                <span class="message-author">{{
+                  message.role === 'user' ? 'You' : 'Content Pedia'
+                }}</span>
+                <p>{{ message.content }}</p>
+              </div>
+            </article>
+          }
+          @if (isGenerating()) {
+            <article class="message-row assistant-message">
+              <div class="message-bubble">
+                <span class="message-author">Content Pedia</span>
+                <p class="status" role="status">Generating your content...</p>
+              </div>
+            </article>
+          }
+          @if (errorMessage()) {
+            <div class="error" role="alert">
+              <span>{{ errorMessage() }}</span>
+              <button class="retry-button" type="button" (click)="retryLastPrompt()">
+                Try again
+              </button>
+            </div>
+          }
+        </div>
 
-        @if (isGenerating()) {
-          <p class="status" role="status">Generating your content...</p>
-        } @else if (errorMessage()) {
-          <p class="error" role="alert">{{ errorMessage() }}</p>
-        } @else if (generatedContent()) {
-          <section class="result" aria-labelledby="result-title">
-            <h2 id="result-title">Generated content</h2>
-            <p>{{ generatedContent() }}</p>
-          </section>
-        }
+        <div class="composer">
+          <label for="content-prompt">What would you like to create?</label>
+          <textarea
+            id="content-prompt"
+            [(ngModel)]="prompt"
+            placeholder="Describe the content you need..."
+            rows="3"
+            [disabled]="isGenerating()"
+            (ngModelChange)="updateDraftTitle($event)"
+            (keydown.control.enter)="generateContent()"
+          ></textarea>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="generateContent()"
+            [disabled]="!prompt.trim() || isGenerating()"
+          >
+            {{ isGenerating() ? 'Generating...' : 'Generate' }}
+          </button>
+        </div>
       </section>
     </div>
   </div>
