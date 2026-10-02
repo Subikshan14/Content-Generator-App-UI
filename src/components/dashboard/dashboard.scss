@@ -38,7 +38,62 @@
   }
 }
 .dashboard-container {
-  height: 100%;
-  background-color: yellow;
+  flex: 1;
   width: 100%;
+  padding: 32px;
+  background-color: #f4f6f4;
+  box-sizing: border-box;
+}
+.generator {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.generator h1,
+.result h2 {
+  margin: 0;
+}
+.generator label {
+  font-weight: 500;
+}
+.generator textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid #aab4ac;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font: inherit;
+  resize: vertical;
+}
+.generator button {
+  min-width: 120px;
+  min-height: 40px;
+}
+.status {
+  margin: 0;
+}
+.error {
+  margin: 0;
+  color: #b3261e;
+}
+.result {
+  width: 100%;
+  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 1px solid #cbd2cc;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.result p {
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .dashboard-container {
+    padding: 20px 16px;
+  }
 }

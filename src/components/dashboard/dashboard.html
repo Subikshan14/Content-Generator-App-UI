@@ -7,6 +7,37 @@
   </div>
   <div class="main-content">
     <div class="dash-header"><span>CONTENT PEDIA</span></div>
-    <div class="dashboard-container"></div>
+    <div class="dashboard-container">
+      <section class="generator" aria-labelledby="generator-title">
+        <h1 id="generator-title">Generate content</h1>
+        <label for="content-prompt">What would you like to create?</label>
+        <textarea
+          id="content-prompt"
+          [(ngModel)]="prompt"
+          placeholder="Describe the content you need..."
+          rows="5"
+          [disabled]="isGenerating()"
+        ></textarea>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="generateContent()"
+          [disabled]="!prompt.trim() || isGenerating()"
+        >
+          {{ isGenerating() ? 'Generating...' : 'Generate' }}
+        </button>
+
+        @if (isGenerating()) {
+          <p class="status" role="status">Generating your content...</p>
+        } @else if (errorMessage()) {
+          <p class="error" role="alert">{{ errorMessage() }}</p>
+        } @else if (generatedContent()) {
+          <section class="result" aria-labelledby="result-title">
+            <h2 id="result-title">Generated content</h2>
+            <p>{{ generatedContent() }}</p>
+          </section>
+        }
+      </section>
+    </div>
   </div>
 </div>
